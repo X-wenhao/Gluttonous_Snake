@@ -39,19 +39,12 @@ struct food* initFood(struct food *prt1, struct snake* head) {
 		prt2->y = y;
 		if (j == 0) {
 			prt2->kind = 6;
-			//setfillcolor(WHITE);
-			//solidcircle(prt2->x, prt2->y, 5);
-
 		}
 		else if (j <=(450 - mygame.speed) / 50) {
 			prt2->kind = 7;
-			//setfillcolor(RED);
-			//solidcircle(prt2->x, prt2->y, 5);
 		}
 		else {
 			prt2->kind = 8;
-			//setfillcolor(BLACK);
-			//solidcircle(prt2->x, prt2->y, 5);
 		}
 		if (j != (450 - mygame.speed) / 25) {
 			prt2->next = (struct food *)malloc(sizeof(struct food));
@@ -63,14 +56,35 @@ struct food* initFood(struct food *prt1, struct snake* head) {
 }
 
 void moveSnake(struct snake * head, struct food *prt1) {
+	drawBackground();
+	settextstyle(80, 22, _T("楷体"));
+	settextcolor(BLACK);
+	outtextxy(70, 150, _T("Press One Key To Start"));
+	_getch();
 	struct snake add;
 
 	int dir1 = RIGHT;
+	if (head->x == head->next->x)
+	{
+		if (head->y < head->next->y)dir1 = UP;
+		else
+		{
+			dir1 = DOWN;
+		}
+	}
+	else
+	{
+		if (head->x < head->next->x)dir1 = LEFT;
+		else
+		{
+			dir1 = RIGHT;
+		}
+	}
 	int dir2 = dir1;
 	while (1)
 	{
 		add = *head;
-		//if (_kbhit()) {
+		if (_kbhit()) {
 			dir2 = _getch();
 			if (dir2 == 224) 
 			{
@@ -85,7 +99,7 @@ void moveSnake(struct snake * head, struct food *prt1) {
 			{
 				dir1 = dir2;
 			}
-//		}
+		}
 		switch (dir1)
 		{
 		case LEFT:
@@ -122,7 +136,11 @@ void moveSnake(struct snake * head, struct food *prt1) {
 	switch (mygame._isover)
 	{
 	case DEATH:
-		failure();
+		drawBackground();
+		settextstyle(80, 22, _T("楷体"));
+		settextcolor(BLACK);
+		outtextxy(200, 200, _T("YOU LOSE!!"));
+		_getch();
 		writerecord();
 		break;
 	case NEXTGG:
@@ -131,9 +149,13 @@ void moveSnake(struct snake * head, struct food *prt1) {
 		settextstyle(30, 20, _T("楷体"));
 		outtextxy(10, 200, _T("恭喜进入下一关，按任意键继续"));
 		_getch();
-		startgame();
+		startgame(0);
 		break;
 	case SUCCESS:
+		drawBackground();
+		settextstyle(80, 22, _T("楷体"));
+		settextcolor(BLACK);
+		outtextxy(200, 200, _T("YOU SUCCEED!!"));
 		writerecord();
 		break;
 	}
@@ -193,10 +215,10 @@ struct snake* eatFood(struct snake* head, struct food*prt1, int kind)
 			}
 			else
 			{
-				for (int i = 1;i <= (mygame.snakeLen+1) / 2 -1;i++)head = head->next;
+				for (int i = 1;i <= (int)(mygame.snakeLen+1) / 2 -1;i++)head = head->next;
 				head->next = NULL;
 				mygame.score -= (int)(mygame.snakeLen /2) * 100;
-				mygame.snakeLen -= (mygame.snakeLen + 1) / 2 - 1;
+				mygame.snakeLen = (mygame.snakeLen + 1) / 2 ;
 				initscore();
 			}
 		break;

@@ -4,6 +4,7 @@
 #include<conio.h>
 #include<graphics.h>
 #include<easyx.h>
+#include<stdio.h>
 #define LEFT  75
 #define RIGHT 77
 #define UP    72
@@ -34,6 +35,5 @@ void menu();
 void choose();
 void drawBackground();
 void highlight(int pos,int kind);
-void startgame();
-
-void failure();
+void startgame(int);
+int choosegame();

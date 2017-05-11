@@ -91,15 +91,15 @@ int chooseMap()
 void initscore() {
 	//mygame.score = (mygame.snakeLen - 2) * 100;
 	switch (mygame.score) {
-	case 200:
+	case 1200:
 		mygame.grade++; mygame.speed -= 100; 
 		mygame._isover = NEXTGG;
 		break;
-	case 400:
+	case 2500:
 		mygame.grade++; mygame.speed -= 100; 
 		mygame._isover = NEXTGG;
 		break;
-	case 600:
+	case 5000:
 		mygame._isover = SUCCESS;
 		break;
 	}
@@ -131,6 +131,10 @@ void drawscore()
 	solidcircle(485, 160, 5);
 	outtextxy(495, 150, _T("Õ¨µ¯"));
 
+	line(480, 200, 640, 200);
+	outtextxy(500, 220, _T("ÒÆ¶¯£º·½Ïò¼ü"));
+
+	outtextxy(500, 260, _T("´æµµ£ºESC"));
 }
 
 void showrecord()
@@ -180,12 +184,9 @@ void writerecord()
 		char name[10];
 	};
 	
-	drawBackground();
-	settextstyle(80, 22, _T("¿¬Ìå"));
-	settextcolor(BLACK);
-	outtextxy(200, 200, _T("YOU SUCCEED!!"));
 	
 	struct player players[5];
+	struct player temptt;
 	FILE *fp;
 	fopen_s(&fp, "Record.rec", "rb");
 	for (int k = 0;k < 5;k++)
@@ -201,6 +202,7 @@ void writerecord()
 			players[k].name[i] = ch;
 		}
 		fscanf_s(fp, "%d", &players[k].score);
+		 temptt = players[k];
 	}
 	
 	if (mygame.score <= players[4].score)
@@ -212,6 +214,7 @@ void writerecord()
 	{
 		players[4].score = mygame.score;
 		InputBox(players[4].name, 10, "¹§Ï²Äú½øÈëÅÅÐÐ°ñ£¬ÇëÊäÈëÄúµÄÐÕÃû", NULL, NULL, 0, 0, true);
+		temptt = players[4];
 		for (int i = 0;i < 10;i++)
 		{
 			if (players[4].name[i] == '\0' || players[4].name[i] == '\n' || players[4].name[i] == '\r')
@@ -219,7 +222,7 @@ void writerecord()
 				players[4].name[i] = ' ';
 			}
 		}
-		struct player temp;
+		struct player temp= players[4];
 		for (int i = 4;i >= 1;i--)
 		{
 			if (players[i].score > players[i - 1].score)
@@ -244,7 +247,7 @@ void writerecord()
 void memory(struct snake *head, struct food *prt1)
 {
 	FILE *fp;
-	fopen_s(&fp, "Memory.mem", "rb");
+	fopen_s(&fp, "Memory.mem", "wb");
 
 	fprintf_s(fp, "%d  ", mygame.grade);
 	fprintf_s(fp, "%d  ", mygame.isPosExist);
@@ -272,3 +275,4 @@ void memory(struct snake *head, struct food *prt1)
 	}
 	fclose(fp);
 }
+
